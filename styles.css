@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 data-testid="dashboard-title">SYL/SBL Dashboard</h1>
+<div class="cards">
+  <div class="card"><h2>SYL</h2><p data-testid="syl">{{ limits.syl }}</p></div>
+  <div class="card"><h2>SBL</h2><p data-testid="sbl">{{ limits.sbl }}</p></div>
+  <div class="card"><h2>SML</h2><p data-testid="sml">{{ limits.sml }}</p></div>
+  <div class="card"><h2>Used Lots</h2><p>{{ limits.used_lots }}</p></div>
+</div>
+
+<h2>Recent Lot Decisions</h2>
+<table data-testid="decision-table">
+<tr><th>Lot</th><th>Yield</th><th>Bin Rate</th><th>Bin Qty</th><th>Decision</th><th>Reasons</th></tr>
+{% for d in decisions %}
+<tr>
+<td>{{ d.lot_id }}</td><td>{{ d.yield_percent }}</td><td>{{ d.bin_rate_percent }}</td>
+<td>{{ d.bin_qty }}</td><td>{{ d.decision }}</td><td>{{ d.reasons }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

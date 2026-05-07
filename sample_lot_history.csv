@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Lot Hold Evaluation</h1>
+
+<section class="card">
+<p>Current SYL: <strong>{{ limits.syl }}</strong></p>
+<p>Current SBL: <strong>{{ limits.sbl }}</strong></p>
+<p>Current SML: <strong>{{ limits.sml }}</strong></p>
+</section>
+
+<form method="post" class="card form-card">
+<label>Lot ID</label><input data-testid="lot-id" name="lot_id" required>
+<label>Yield %</label><input data-testid="yield-percent" name="yield_percent" required>
+<label>Fail Bin Rate %</label><input data-testid="bin-rate-percent" name="bin_rate_percent" required>
+<label>Triggered Bin Quantity</label><input data-testid="bin-qty" name="bin_qty" required>
+<label><input data-testid="small-quantity-rule" type="checkbox" name="small_quantity_rule"> Apply small quantity QDN skip rule</label>
+<label><input data-testid="asic-sbin" type="checkbox" name="asic_sbin"> ASIC FT SBin rule</label>
+<button data-testid="evaluate-lot">Evaluate Lot</button>
+</form>
+
+{% if result %}
+<section class="card result">
+<h2>Decision</h2>
+<p data-testid="decision">{{ result.decision }}</p>
+<p data-testid="reasons">{{ result.reasons }}</p>
+</section>
+{% endif %}
+{% endblock %}

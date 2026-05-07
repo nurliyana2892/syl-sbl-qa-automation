@@ -1,0 +1,20 @@
+class LotEvaluationPage:
+    def __init__(self, page):
+        self.page = page
+
+    def open(self):
+        self.page.goto("http://127.0.0.1:5000/lot-evaluation")
+
+    def evaluate(self, lot_id, yield_percent, bin_rate_percent, bin_qty, small_rule=False, asic_sbin=False):
+        self.page.get_by_test_id("lot-id").fill(lot_id)
+        self.page.get_by_test_id("yield-percent").fill(str(yield_percent))
+        self.page.get_by_test_id("bin-rate-percent").fill(str(bin_rate_percent))
+        self.page.get_by_test_id("bin-qty").fill(str(bin_qty))
+        if small_rule:
+            self.page.get_by_test_id("small-quantity-rule").check()
+        if asic_sbin:
+            self.page.get_by_test_id("asic-sbin").check()
+        self.page.get_by_test_id("evaluate-lot").click()
+
+    def decision(self):
+        return self.page.get_by_test_id("decision").inner_text()

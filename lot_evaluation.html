@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+  <title>SYL/SBL Limit Automation Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<nav>
+  <strong>SYL/SBL Automation Portal</strong>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/limits">Limit Calculator</a>
+  <a href="/lot-evaluation">Lot Evaluation</a>
+  <a href="/limit-review">Limit Review</a>
+</nav>
+<main>{% block content %}{% endblock %}</main>
+</body>
+</html>
