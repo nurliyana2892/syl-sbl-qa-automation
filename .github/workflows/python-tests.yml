@@ -10,30 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        playwright install
-        playwright install-deps
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install
+          playwright install-deps
 
-    - name: Start Flask App
-  run: |
-    nohup python run_app.py &
-    sleep 5
+      - name: Start Flask App
+        run: |
+          nohup python run_app.py &
+          sleep 5
 
-- name: Run API Tests
-  run: pytest tests/test_limit_api.py
+      - name: Run API Tests
+        run: pytest tests/test_limit_api.py
 
-    - name: Run Logic Tests
-      run: pytest tests/test_limit_engine.py
+      - name: Run Logic Tests
+        run: pytest tests/test_limit_engine.py
 
-    - name: Run Database Tests
-      run: pytest tests/test_database_validation.py
+      - name: Run Database Tests
+        run: pytest tests/test_database_validation.py
+        
