@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from datetime import datetime
 import sqlite3
 
 app = Flask(__name__)
@@ -16,14 +17,26 @@ def save_lot_result(yield_percent, bin_rate, decision):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             yield_percent REAL,
             bin_rate REAL,
-            decision TEXT
+            decision TEXT,
+            created_at TEXT            
         )
     """)
 
     cursor.execute("""
-        INSERT INTO lot_results (yield_percent, bin_rate, decision)
-        VALUES (?, ?, ?)
-    """, (yield_percent, bin_rate, decision))
+    INSERT INTO lot_results (
+        yield_percent,
+        bin_rate,
+        decision,
+        created_at
+    )
+    VALUES (?, ?, ?, ?)
+""",
+(
+    yield_percent,
+    bin_rate,
+    decision,
+    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+))
 
     conn.commit()
     conn.close()
@@ -260,5 +273,120 @@ def api_evaluate():
     return jsonify({"decision": decision})
 
 
-if __name__ == "__main__":
+@app.route("/history")
+def history():
+
+    conn = sqlite3.connect("lots.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT yield_percent, bin_rate, decision, created_at
+        FROM lot_results
+        ORDER BY id DESC
+        LIMIT 20
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    table_rows = ""
+
+    for row in rows:
+        yield_percent, bin_rate, decision, created_at = row
+
+        color = "#16a34a" if decision == "RELEASE" else "#dc2626"
+
+        table_rows += f"""
+        <tr>
+            <td>{created_at}</td>
+            <td>{yield_percent}%</td>
+            <td>{bin_rate}%</td>
+            <td>
+                <span style="
+                    background:{color};
+                    color:white;
+                    padding:6px 12px;
+                    border-radius:999px;
+                    font-weight:bold;
+                ">
+                    {decision}
+                </span>
+            </td>
+        </tr>
+        """
+
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Lot History Dashboard</title>
+
+        <style>
+            body {{
+                margin:0;
+                padding:40px;
+                font-family:Arial;
+                background:linear-gradient(135deg,#0f172a,#1e3a8a);
+                color:white;
+            }}
+
+            .container {{
+                background:white;
+                color:black;
+                border-radius:24px;
+                padding:32px;
+            }}
+
+            h1 {{
+                margin-top:0;
+            }}
+
+            table {{
+                width:100%;
+                border-collapse:collapse;
+                margin-top:24px;
+            }}
+
+            th {{
+                background:#2563eb;
+                color:white;
+                padding:14px;
+                text-align:left;
+            }}
+
+            td {{
+                padding:14px;
+                border-bottom:1px solid #e5e7eb;
+            }}
+
+            tr:hover {{
+                background:#f8fafc;
+            }}
+        </style>
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <h1>Production Lot History</h1>
+
+            <table>
+
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Yield</th>
+                    <th>Fail Bin</th>
+                    <th>Decision</th>
+                </tr>
+
+                {table_rows}
+
+            </table>
+
+        </div>
+
+    </body>
+    </html>
+    """
     app.run(debug=True, port=5000)
