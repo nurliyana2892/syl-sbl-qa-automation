@@ -13,16 +13,19 @@ def save_lot_result(yield_percent, bin_rate, decision):
     cursor = conn.cursor()
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS lot_results (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            yield_percent REAL,
-            bin_rate REAL,
-            decision TEXT,
-            created_at TEXT            
-        )
-    """)
-    try:
-    cursor.execute("ALTER TABLE lot_results ADD COLUMN created_at TEXT")
+    CREATE TABLE IF NOT EXISTS lot_results (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        yield_percent REAL,
+        bin_rate REAL,
+        decision TEXT,
+        created_at TEXT
+    )
+""")
+
+try:
+    cursor.execute(
+        "ALTER TABLE lot_results ADD COLUMN created_at TEXT"
+    )
 except sqlite3.OperationalError:
     pass
 
