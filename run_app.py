@@ -297,6 +297,23 @@ def history():
     rows = cursor.fetchall()
     conn.close()
 
+    total_lots = len(rows)
+
+    hold_lots = len([
+    r for r in rows
+    if r[2] != "RELEASE"
+    ])
+
+    release_lots = len([
+        r for r in rows
+        if r[2] == "RELEASE"
+    ])
+
+    hold_rate = (
+        round((hold_lots / total_lots) * 100, 1)
+        if total_lots > 0 else 0
+)
+
     table_rows = ""
 
     for row in rows:
@@ -349,6 +366,32 @@ def history():
                 margin-top:0;
             }}
 
+            .kpi-grid {
+                display:grid;
+                grid-template-columns:repeat(4,1fr);
+                gap:20px;
+                margin-top:24px;
+                margin-bottom:32px;
+            }
+
+            .kpi-card {
+                background:#eff6ff;
+                border-radius:18px;
+                padding:24px;
+                text-align:center;
+            }
+
+            .kpi-card h3 {
+                margin-top:0;
+                color:#475569;
+            }
+
+            .kpi-value {
+                font-size:42px;
+                font-weight:bold;
+                color:#2563eb;
+            }
+            
             table {{
                 width:100%;
                 border-collapse:collapse;
@@ -378,6 +421,30 @@ def history():
         <div class="container">
 
             <h1>Production Lot History</h1>
+
+            <div class="kpi-grid">
+
+                <div class="kpi-card">
+                    <h3>Total Lots</h3>
+                    <div class="kpi-value">{total_lots}</div>
+                </div>
+
+                <div class="kpi-card">
+                    <h3>HOLD Lots</h3>
+                    <div class="kpi-value">{hold_lots}</div>
+                </div>
+
+                <div class="kpi-card">
+                    <h3>RELEASE Lots</h3>
+                    <div class="kpi-value">{release_lots}</div>
+                </div>
+
+                <div class="kpi-card">
+                    <h3>HOLD Rate</h3>
+                    <div class="kpi-value">{hold_rate}%</div>
+                </div>
+
+            </div>
 
             <table>
 
