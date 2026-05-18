@@ -153,6 +153,22 @@ def home():
                 background: #1d4ed8;
             }}
 
+            .history-btn {{
+                display: block;
+                text-align: center;
+                margin-top: 16px;
+                background: #0f172a;
+                color: white;
+                padding: 14px;
+                border-radius: 12px;
+                text-decoration: none;
+                font-weight: bold;
+            }}
+
+            .history-btn:hover {{
+                background: #1e293b;
+            }}
+
             .footer {{
                 margin-top: 28px;
                 color: #64748b;
@@ -189,6 +205,9 @@ def home():
                             Evaluate Lot
                         </button>
                     </form>
+                    <a href="/history" class="history-btn">
+                        View Lot History
+                    </a>
                 </div>
             </div>
 
