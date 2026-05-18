@@ -382,31 +382,31 @@ def history():
                 margin-top:0;
             }}
 
-            .kpi-grid {
+            .kpi-grid {{
                 display:grid;
                 grid-template-columns:repeat(4,1fr);
                 gap:20px;
                 margin-top:24px;
                 margin-bottom:32px;
-            }
+            }}
 
-            .kpi-card {
+            .kpi-card {{
                 background:#eff6ff;
                 border-radius:18px;
                 padding:24px;
                 text-align:center;
-            }
+            }}
 
-            .kpi-card h3 {
+            .kpi-card h3 {{
                 margin-top:0;
                 color:#475569;
-            }
+            }}
 
-            .kpi-value {
+            .kpi-value {{
                 font-size:42px;
                 font-weight:bold;
                 color:#2563eb;
-            }
+            }}
             
             table {{
                 width:100%;
